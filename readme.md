@@ -117,6 +117,12 @@ https://github.com/tesseract-ocr/tesseract
 
 Tambahkan path Tesseract ke environment variable.
 
+---
+
+### 5. Jalankan Sistem Deteksi
+
+```bash
+python detect_plate.py
 ```
 
 Sistem akan memproses input dari kamera dan mendeteksi plat nomor kendaraan.
@@ -168,5 +174,12 @@ Tujuan utama dari pengembangan sistem ini:
 - Mengintegrasikan teknologi **Computer Vision dengan IoT**
 - Meningkatkan keamanan dan efisiensi sistem akses kendaraan
 - Menerapkan teknologi AI pada sistem gerbang otomatis
+
+---
+
+# 📸 Application Preview
+
+![alt text](https://github.com/Jimmy-hubb/Mobile-Cuan-Space-Semester-4/blob/main/assets/WhatsApp%20Image%202026-03-02%20at%2020.06.57.jpeg?raw=true)
+
 
 ---
