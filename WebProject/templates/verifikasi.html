@@ -1,0 +1,77 @@
+{% include "layouts/header.html" %}
+
+<div class="content-wrapper">
+
+  <section class="content-header">
+    <div class="container-fluid">
+      <h3>Data Plat Terverifikasi</h3>
+    </div>
+  </section>
+
+  <section class="content">
+    <div class="container-fluid">
+
+      <div class="card">
+        <div class="card-header bg-success text-white">
+          <h3 class="card-title">Plat Terverifikasi</h3>
+        </div>
+
+        <div class="card-body table-responsive">
+          <table class="table table-bordered table-striped text-center">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Waktu</th>
+                <th>Plat</th>
+                <th>Pemilik</th>
+                <th>Status Kendaraan</th>
+                <th>Status</th>
+                <th>Foto</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% if data_table %}
+              {% for row in data_table %}
+              <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ row.waktu }}</td>
+                <td class="font-weight-bold">{{ row.plat }}</td>
+                <td>{{ row.pemilik }}</td>
+
+                <!-- STATUS KENDARAAN -->
+                <td>
+                  {% if row.status_kendaraan == "di_dalam" %}
+                  <span class="badge badge-success">Di Dalam</span>
+                  {% elif row.status_kendaraan == "di_luar" %}
+                  <span class="badge badge-secondary">Di Luar</span>
+                  {% else %}
+                  <span class="badge badge-warning">Tidak Diketahui</span>
+                  {% endif %}
+                </td>
+
+                <!-- STATUS VERIFIKASI -->
+                <td>
+                  <span class="badge badge-success">{{ row.status }}</span>
+                </td>
+
+                <!-- FOTO -->
+                <td>
+                  <img src="{{ url_for('uploaded_file', filename=row.gambar) }}" width="120" class="img-thumbnail">
+                </td>
+
+              </tr>
+              {% endfor %}
+              {% else %}
+              <tr>
+                <td colspan="7" class="text-muted">Belum ada data...</td>
+              </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+{% include "layouts/footer.html" %}

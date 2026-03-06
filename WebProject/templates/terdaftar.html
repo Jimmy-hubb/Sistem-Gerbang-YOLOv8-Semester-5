@@ -1,0 +1,64 @@
+{% include "layouts/header.html" %}
+
+<div class="content-wrapper">
+
+  <section class="content-header">
+    <div class="container-fluid">
+      <h3>Daftar Plat Terdaftar (Whitelist)</h3>
+    </div>
+  </section>
+
+  <section class="content">
+    <div class="container-fluid">
+
+      <div class="card">
+        <div class="card-header bg-info text-white">
+          <h3 class="card-title">Daftar Kendaraan Penghuni</h3>
+        </div>
+
+        <div class="card-body table-responsive">
+          <table class="table table-bordered table-striped text-center">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Plat</th>
+                <th>Pemilik</th>
+                <th>Foto</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {% if data_table %}
+                {% for row in data_table %}
+                <tr>
+                  <td>{{ loop.index }}</td>
+                  <td class="font-weight-bold">{{ row.plat }}</td>
+                  <td>{{ row.pemilik }}</td>
+                  <td>
+                    {% if row.gambar %}
+                        <img src="{{ url_for('uploaded_file', filename=row.gambar) }}"
+                            width="120" class="img-thumbnail">
+                    {% else %}
+                        <span class="text-muted">Tidak ada foto</span>
+                    {% endif %}
+                  </td>
+
+                </tr>
+                {% endfor %}
+              {% else %}
+                <tr>
+                  <td colspan="5" class="text-muted">Belum ada data terdaftar...</td>
+                </tr>
+              {% endif %}
+            </tbody>
+
+          </table>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+</div>
+
+{% include "layouts/footer.html" %}

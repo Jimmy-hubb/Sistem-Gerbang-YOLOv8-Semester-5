@@ -1,0 +1,91 @@
+{% include 'layouts/header.html' %}
+
+<div class="content-wrapper">
+  <div class="content-header">
+    <div class="container-fluid">
+      <h3 class="mt-3">Deteksi Kendaraan</h3>
+      <p>Silakan ambil gambar atau unggah file plat nomor untuk diproses.</p>
+    </div>
+  </div>
+
+  <section class="content">
+    <div class="container-fluid">
+
+      <div class="row">
+        <!-- Upload Form -->
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header bg-primary text-white">
+              <h5 class="card-title">Upload Gambar</h5>
+            </div>
+
+            <div class="card-body">
+              <form id="formDeteksi">
+                <input type="file" name="image" id="fileInput" class="form-control mb-3" accept="image/*" required>
+
+                <button type="submit" class="btn btn-success w-100">
+                  <i class="fas fa-upload"></i> Proses Deteksi
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hasil -->
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header bg-info text-white">
+              <h5 class="card-title">Hasil Deteksi</h5>
+            </div>
+
+            <div class="card-body text-center" id="resultBox">
+              <p class="text-muted">Belum ada data...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<script>
+    document.getElementById("formDeteksi").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    let file = document.getElementById("fileInput").files[0];
+    if (!file) {
+        alert("Silakan pilih file gambar!");
+        return;
+    }
+
+    let formData = new FormData();
+    formData.append("image", file);
+
+    fetch("/deteksi", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        let resultDiv = document.getElementById("resultBox");
+        
+        if (data.error) {
+        resultDiv.innerHTML = `<p class="text-danger">${data.error}</p>`;
+        return;
+        }
+
+        let listPlat = data.plat.map(p => `<span class='badge bg-success m-1'>${p}</span>`).join("");
+
+        resultDiv.innerHTML = `
+        <h4>${data.jumlah} Kendaraan Terdeteksi</h4>
+        <div class="mt-3">Plat Nomor: ${listPlat}</div>
+        `;
+    })
+    .catch(err => {
+        document.getElementById("resultBox").innerHTML = `<p class="text-danger">Gagal mendeteksi!</p>`;
+    });
+    });
+</script>
+
+{% include 'layouts/footer.html' %}

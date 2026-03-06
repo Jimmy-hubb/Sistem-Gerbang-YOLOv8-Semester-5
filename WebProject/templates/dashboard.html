@@ -1,0 +1,116 @@
+{% include 'layouts/header.html' %}
+
+<div class="content-wrapper">
+  <div class="content-header">
+    <div class="container-fluid">
+      <h3 class="mt-3">Dashboard</h3>
+      <h5>Selamat datang, <b>{{ username }}</b>!</h5>
+    </div>
+  </div>
+
+  <section class="content">
+    <div class="container-fluid">
+
+      <!-- STATISTIK CARD -->
+      <div class="row">
+
+        <!-- Total kendaraan terdeteksi hari ini -->
+        <div class="col-lg-4 col-6">
+          <div class="small-box bg-info">
+            <div class="inner">
+              <h3>{{ total_hari_ini }}</h3>
+              <p>Total Kendaraan Hari Ini</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-car"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gerbang terakhir dibuka -->
+        <div class="col-lg-4 col-6">
+          <div class="small-box bg-success">
+            <div class="inner">
+              <h3>{{ last_open_time }}</h3>
+              <p>Gerbang Terakhir Dibuka</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-door-open"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Akurasi Pengenalan Plat -->
+        <div class="col-lg-4 col-6">
+          <div class="small-box bg-warning">
+            <div class="inner text-white">
+              <h3>{{ akurasi }}%</h3>
+              <p>Akurasi Pengenalan Plat</p>
+            </div>
+            <div class="icon">
+              <i class="fas fa-percentage"></i>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- DONUT CHART -->
+      <div class="card mt-3">
+        <div class="card-header">
+          <h5 class="card-title">Statistik Kendaraan Masuk & Keluar Hari Ini</h5>
+        </div>
+        <div class="card-body">
+          <canvas id="donutChart" style="max-height: 300px;"></canvas>
+        </div>
+      </div>
+
+      <!-- Live camera placeholder -->
+      <!-- <div class="card mt-3 mb-4">
+        <div class="card-header">
+          <h5 class="card-title">Live Kamera</h5>
+        </div>
+        <div class="card-body text-center">
+          <img src="https://via.placeholder.com/900x450" class="img-fluid rounded">
+        </div>
+      </div> -->
+
+    </div>
+  </section>
+</div>
+
+{% include 'layouts/footer.html' %}
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const ctx = document.getElementById('donutChart').getContext('2d');
+
+const donutChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: ['Masuk Hari Ini', 'Keluar Hari Ini'],
+        datasets: [
+            {
+                data: [
+                    parseInt("{{ total_masuk_hari_ini | default(0) | int }}"),
+                    parseInt("{{ total_keluar_hari_ini | default(0) | int }}")
+
+                ],
+                backgroundColor: ['#17a2b8', '#28a745'],
+                borderColor: ['#ffffff', '#ffffff'],
+                borderWidth: 2
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            }
+        }
+    }
+});
+</script>

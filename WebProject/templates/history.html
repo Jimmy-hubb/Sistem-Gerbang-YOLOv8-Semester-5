@@ -1,0 +1,121 @@
+{% include "layouts/header.html" %}
+
+<div class="content-wrapper">
+  <section class="content-header">
+    <div class="container-fluid">
+      <h3>Histori Plat Nomor Terdeteksi</h3>
+    </div>
+  </section>
+
+  <section class="content">
+    <div class="container-fluid">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h3 class="card-title">Data Plat Terdeteksi</h3>
+        </div>
+
+        <div class="card-body table-responsive">
+          <table class="table table-bordered table-striped text-center">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Waktu</th>
+                <th>Plat</th>
+                <th>Pemilik</th>
+                <th>Mode</th>
+                <th>Kamera</th>
+                <th>Terdaftar</th>
+                <th>Status</th>
+                <th>Foto</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {% if data_table %}
+                {% for row in data_table %}
+                <tr>
+                  <td>{{ loop.index }}</td>
+                  <td>{{ row.waktu }}</td>
+                  <td>{{ row.plat }}</td>
+                  <td>{{ row.pemilik }}</td>
+                  <td>{{ row.mode }}</td>
+                  <td>{{ row.kamera }}</td>
+                  <td>{{ row.terdaftar }}</td>
+                  <td>{{ row.status }}</td>
+                  <td>
+                      <img src="{{ url_for('uploaded_file', filename=row.gambar) }}" width="120" class="img-thumbnail">
+                  </td>
+                  <td>
+                    {% if row.status == "ditolak" %}
+                        <button class="btn btn-success btn-sm btn-verif"
+                                data-id="{{ row.id }}"
+                                data-owner="{{ row.pemilik }}">
+                            Verifikasi & Daftarkan
+                        </button>
+                    {% else %}
+                        <span class="text-success">Sudah Diverifikasi</span>
+                    {% endif %}
+                </td>
+
+                </tr>
+
+                {% endfor %}
+              {% else %}
+                <tr>
+                  <td colspan="7" class="text-muted">Belum ada data...</td>
+                </tr>
+              {% endif %}
+
+              <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+              <script>
+              document.addEventListener("click", async function(e){
+                  if (!e.target.classList.contains("btn-verif")) return;
+
+                  const id = e.target.dataset.id;
+                  let pemilik = e.target.dataset.owner || "";
+
+                  if (!pemilik || pemilik === "-" || pemilik.trim() === "") {
+                      const { value: ownerName } = await Swal.fire({
+                          title: 'Nama pemilik',
+                          input: 'text',
+                          inputLabel: 'Masukkan nama pemilik',
+                          showCancelButton: true,
+                      });
+                      if (ownerName === undefined) return;
+                      pemilik = ownerName || "-";
+                  }
+
+                  const res = await fetch(`/verifikasi/${id}`, {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ pemilik })
+                  });
+
+                  const data = await res.json();
+
+                  if (data.success) {
+                      Swal.fire({
+                          icon: 'success',
+                          title: 'Berhasil',
+                          text: `Plat ${data.plat} terdaftar & gerbang dibuka`,
+                          timer: 1500,
+                          showConfirmButton: false
+                      });
+                      setTimeout(() => location.reload(), 1500);
+                  } else {
+                      Swal.fire('Error', data.error, 'error');
+                  }
+              });
+              </script>
+
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</div>
+
+{% include "layouts/footer.html" %}
