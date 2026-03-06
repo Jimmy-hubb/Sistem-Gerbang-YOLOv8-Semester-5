@@ -179,7 +179,7 @@ Tujuan utama dari pengembangan sistem ini:
 
 # 📸 Application Preview
 
-![alt text](https://github.com/Jimmy-hubb/Mobile-Cuan-Space-Semester-4/blob/main/assets/WhatsApp%20Image%202026-03-02%20at%2020.06.57.jpeg?raw=true)
+![alt text](https://github.com/Jimmy-hubb/Sistem-Gerbang-YOLOv8-Semester-5/blob/main/poster%20gerbang.jpg?raw=true)
 
 
 ---
